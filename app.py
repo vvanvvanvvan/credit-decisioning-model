@@ -46,7 +46,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.subheader("Financial Details")
     income      = st.number_input(
-        "Annual Income (€)",
+        "Monthly Income (€)",
         min_value=0,
         value=25000,
         step=1000)
