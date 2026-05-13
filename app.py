@@ -1,4 +1,15 @@
+import os
 
+# Get the directory where app.py lives
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Load files using absolute paths
+model  = joblib.load(os.path.join(BASE_DIR, "credit_model.pkl"))
+scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
+
+with open(os.path.join(BASE_DIR, "model_config.json")) as f:
+    config = json.load(f)
+    
 import streamlit as st
 import pandas as pd
 import numpy as np
