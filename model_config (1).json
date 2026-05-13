@@ -1,1 +1,0 @@
-{"features": ["schufa", "income", "term_length", "install_to_inc", "occup_encoded", "marital_encoded", "loan_amount", "num_applic", "obs_year", "obs_quarter", "income_x_schufa", "loan_x_term", "loan_x_install", "install_x_term"], "approve_threshold": 0.15, "decline_threshold": 0.4}
