@@ -1,15 +1,4 @@
 import os
-
-# Get the directory where app.py lives
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Load files using absolute paths
-model  = joblib.load(os.path.join(BASE_DIR, "credit_model.pkl"))
-scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
-
-with open(os.path.join(BASE_DIR, "model_config.json")) as f:
-    config = json.load(f)
-    
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -19,17 +8,18 @@ import shap
 import matplotlib.pyplot as plt
 
 # ── Load model and config ─────────────────────────────────────
-model  = joblib.load("credit_model.pkl")
-scaler = joblib.load("scaler.pkl")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-with open("model_config.json") as f:
+model  = joblib.load(os.path.join(BASE_DIR, "credit_model.pkl"))
+scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
+
+with open(os.path.join(BASE_DIR, "model_config.json")) as f:
     config = json.load(f)
 
 features          = config["features"]
 APPROVE_THRESHOLD = config["approve_threshold"]
 DECLINE_THRESHOLD = config["decline_threshold"]
 
-# ── Page config ───────────────────────────────────────────────
 st.set_page_config(
     page_title="Credit Decisioning Model",
     page_icon="🏦",
@@ -63,7 +53,7 @@ with col3:
 
 st.divider()
 
-occup_map = {"Employee": 1, "Student": 2, "Unknown": 3, "Worker": 4}
+occup_map   = {"Employee": 1, "Student": 2, "Unknown": 3, "Worker": 4}
 marital_map = {"Married": 1, "Living together": 2, "Single": 3, "Separated": 4, "Divorced": 5, "Unknown": 6}
 
 occup_encoded   = occup_map[occupation]
@@ -147,15 +137,12 @@ if st.button("Run Credit Decision", type="primary", use_container_width=True):
         "Impact":  shap_values[0]
     }).sort_values("Impact")
 
-    top_risk    = shap_df.tail(3)
-    top_protect = shap_df.head(3)
-
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("**Factors increasing risk:**")
-        for _, row in top_risk.iterrows():
+        for _, row in shap_df.tail(3).iterrows():
             st.markdown(f"- {row['Feature']}: +{row['Impact']:.3f}")
     with col2:
         st.markdown("**Factors reducing risk:**")
-        for _, row in top_protect.iterrows():
+        for _, row in shap_df.head(3).iterrows():
             st.markdown(f"- {row['Feature']}: {row['Impact']:.3f}")
