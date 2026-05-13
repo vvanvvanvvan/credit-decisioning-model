@@ -338,7 +338,7 @@ if st.button("Run Credit Decision",
     st.subheader("Applicant Summary")
     summary = pd.DataFrame({
         "Field": [
-            "Annual Income",
+            "Monthly Income",
             "Loan Amount",
             "Term Length",
             "SCHUFA Credit Score",
